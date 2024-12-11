@@ -4,9 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<WeatherService>(s =>
-    new WeatherService(builder.Configuration["OpenWeatherMap:ApiKey"])
-); // Add WeatherService to the container
+builder.Services.AddScoped<WeatherService>();
+builder.Services.AddScoped<IGeocodeService, CensusGeocodeService>();
 
 var app = builder.Build();
 

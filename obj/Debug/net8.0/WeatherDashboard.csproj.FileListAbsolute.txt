@@ -33,3 +33,4 @@ K:\repos\WeatherDashboard\obj\Debug\net8.0\refint\WeatherDashboard.dll
 K:\repos\WeatherDashboard\obj\Debug\net8.0\WeatherDashboard.pdb
 K:\repos\WeatherDashboard\obj\Debug\net8.0\WeatherDashboard.genruntimeconfig.cache
 K:\repos\WeatherDashboard\obj\Debug\net8.0\ref\WeatherDashboard.dll
+K:\repos\WeatherDashboard\obj\Debug\net8.0\WeatherDashboard.sourcelink.json

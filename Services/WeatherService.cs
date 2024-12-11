@@ -1,5 +1,3 @@
-using System.Net.Http;
-using Newtonsoft.Json;
 using WeatherDashboard.Models;
 
 namespace WeatherDashboard.Services
@@ -7,33 +5,35 @@ namespace WeatherDashboard.Services
     public class WeatherService
     {
         private readonly HttpClient _client;
-        private readonly string _apiKey;
-        private readonly string _baseUrl = "https://api.openweathermap.org/data/2.5";
+        private readonly IGeocodeService _geocodeService;
 
-        public WeatherService(string apiKey)
+        public WeatherService (HttpClient client, IGeocodeService geocodeService)
         {
-            _client = new HttpClient();
-            _apiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey), "OpenWeatherMap API key is required");
+            _client = client;
+            _client.DefaultRequestHeaders.Add("User-Agent", "WeatherDashboard, kpetow@gmail.com");
+            _geocodeService = geocodeService;
         }
+    }
 
-        public async Task<(WeatherData Data, double Far, double Cel, double FarFeelsLike, double CelFeelsLike )> GetTemperatures(string city)
+    public async Task<WeatherData> GetWeatherByLocation(string location)
+    {
+        var (latitude, longitude) = await _geocodeService.GetCoordinates(location);
+
+        var pointsUrl = $"https://api.weather.gov/points/{latitude},{longitude}";
+        var pointsResponse = await _client.GetAsync(pointsUrl);
+        var pointsData = await pointsResponse.Content.ReadFromJsonAsync<Points>();
+
+        var currentResponse = await _client.GetAsync(pointsData.Properties.Forecast);
+        var hourlyResponse = await _client.GetAsync(pointsData.Properties.ForecastHourly);
+
+        var currentForecast = await currentResponse.Content.ReadFromJsonAsync<Forecast>();
+        var hourlyForecast = await hourlyResponse.Content.ReadFromJsonAsync<Forecast>();
+
+        return new WeatherData
         {
-            // Builds URL with your parameters
-            var responseImperial = await _client.GetAsync($"{_baseUrl}/weather?q={city}&appid={_apiKey}&units=imperial");
-            var dataImperial = JsonConvert.DeserializeObject<WeatherData>(
-                await responseImperial.Content.ReadAsStringAsync());
-            
-            var responseMetric = await _client.GetAsync($"{_baseUrl}/weather?q={city}&appid={_apiKey}&units=metric");
-            var dataMetric = JsonConvert.DeserializeObject<WeatherData>(
-                await responseMetric.Content.ReadAsStringAsync());
-
-            return (
-                dataImperial, 
-                dataImperial.Main.Temperature, 
-                dataMetric.Main.Temperature, 
-                dataImperial.Main.FeelsLike, 
-                dataMetric.Main.FeelsLike
-            );            
-        }
+            Current = currentForecast.Properties.Periods[0],
+            DailyForecast = currentForecast.Properties.Periods,
+            HourlyForecast = hourlyForecast.Properties.Periods
+        };
     }
 }
