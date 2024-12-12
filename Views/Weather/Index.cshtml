@@ -10,43 +10,44 @@
                </div>
            </form>
     </div>
-    <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+    <div class="relative px-4 py-4 bg-white shadow-lg sm:rounded-3xl sm:p-20">
         
         @if (Model != null)
         {
-            <div class="space-y-4">
+            <div class="relative p-2 bg-gray-100 border-blue-500 rounded-3xl shadow-lg">
                 <h2 class="text-3xl font-bold text-gray-800">@Model.Current.Name in @Model.Location</h2>
                 <div class="space-y-2">
                     <p class="text-4xl font-bold text-blue-600">@Model.Current.Temperature°@Model.Current.TemperatureUnit</p>
                     <p class="text-gray-600">@Model.Current.ShortForecast</p>
                     <p class="text-gray-600">@Model.Current.DetailedForecast</p>
                 </div>
-
-                <div class="mt-6">
-                    <h3 class="text-xl font-semibold mb-2">Next 24 Hours</h3>
-                    <div class="space-y-2">
-                        @foreach (var hour in Model.HourlyForecast.Take(24))
-                        {
-                            <div class="p-2 bg-gray-50 rounded">
-                                <p>@hour.StartTime.ToString("h:mm tt"): @hour.Temperature°@hour.TemperatureUnit - @hour.ShortForecast</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <div class="mt-6">
-                    <h3 class="text-xl font-semibold mb-2">7-Day Forecast</h3>
-                    <div class="space-y-2">
-                        @foreach (var day in Model.DailyForecast)
-                        {
-                            <div class="p-2 bg-gray-50 rounded">
-                                <p class="font-medium">@day.Name</p>
-                                <p>@day.Temperature°@day.TemperatureUnit - @day.ShortForecast</p>
-                            </div>
-                        }
-                    </div>
+            </div>
+        
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-2">Next 24 Hours</h3>
+                <div class="space-y-2">
+                    @foreach (var hour in Model.HourlyForecast.Take(24))
+                    {
+                        <div class="p-2 bg-gray-50 rounded">
+                            <p>@hour.StartTime.ToString("h:mm tt"): @hour.Temperature°@hour.TemperatureUnit - @hour.ShortForecast</p>
+                        </div>
+                    }
                 </div>
             </div>
+
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-2">7-Day Forecast</h3>
+                <div class="space-y-2">
+                    @foreach (var day in Model.DailyForecast)
+                    {
+                        <div class="p-2 bg-gray-50 rounded">
+                            <p class="font-medium">@day.Name</p>
+                            <p>@day.Temperature°@day.TemperatureUnit - @day.ShortForecast</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
         }
 
         @if (Model == null)
