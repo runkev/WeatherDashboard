@@ -27,7 +27,7 @@ namespace WeatherDashboard.Controllers
             try
             {
                 var weatherData = await _weatherService.GetWeatherByLocation(location);
-                return View(weatherData);
+                return View("Index", weatherData);
             }
             catch (Exception ex)
             {

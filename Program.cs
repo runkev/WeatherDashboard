@@ -4,8 +4,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<NominatimGeocodeService>();
+builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddScoped<WeatherService>();
-builder.Services.AddScoped<IGeocodeService, CensusGeocodeService>();
+builder.Services.AddScoped<IGeocodeService, NominatimGeocodeService>();
 
 var app = builder.Build();
 

@@ -1,41 +1,27 @@
 using WeatherDashboard.Models.Response;
 using WeatherDashboard.Services;
 
-public class CensusGeocodeService : IGeocodeService
+public class NominatimGeocodeService : IGeocodeService
 {
     private readonly HttpClient _client;
-    private const string BaseUrl = "https://geocoding.geo.census.gov/geocoder/locations/";
 
-    public CensusGeocodeService(HttpClient client)
+    public NominatimGeocodeService(HttpClient client)
     {
         _client = client;
+        _client.DefaultRequestHeaders.Add("User-Agent", "(WeatherDashboard kpetow@gmail.com)");
     }
 
     public async Task<(double Latitude, double Longitude)> GetCoordinates(string location)
     {
-        bool isZipCode = location.Length == 5 && location.All(char.IsDigit);
-        
-        string requestUrl;
-        if (isZipCode)
-        {
-            requestUrl = $"{BaseUrl}address?zip={location}&benchmark=2020&format=json";
-        }
-        else
-        {
-            requestUrl = $"{BaseUrl}onelineaddress?address={Uri.EscapeDataString(location)}&benchmark=2020&format=json";
-        }
-
+        var requestUrl = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(location)}&format=json&limit=1";
         var response = await _client.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         
-        var result = await response.Content.ReadFromJsonAsync<CensusResponse>();
-
-        if (result?.Result?.AddressMatches == null || !result.Result.AddressMatches.Any())
-        {
+        var results = await response.Content.ReadFromJsonAsync<NominatimResponse[]>();
+        
+        if (results == null || !results.Any())
             throw new Exception($"Location '{location}' not found");
-        }
 
-        var match = result.Result.AddressMatches.First();
-        return (match.Coordinates.Latitude, match.Coordinates.Longitude);
+        return (double.Parse(results[0].Lat), double.Parse(results[0].Lon));
     }
 }
