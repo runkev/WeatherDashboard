@@ -27,6 +27,7 @@ namespace WeatherDashboard.Services
             var hourlyForecast = await hourlyResponse.Content.ReadFromJsonAsync<ForecastResponse>();
             return new WeatherData
             {
+                Location = location,
                 Current = currentForecast.Properties.Periods[0],
                 DailyForecast = currentForecast.Properties.Periods,
                 HourlyForecast = hourlyForecast.Properties.Periods
