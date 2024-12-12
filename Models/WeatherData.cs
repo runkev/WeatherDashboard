@@ -1,3 +1,4 @@
+using WeatherDashboard.Models.Response;
 
 namespace WeatherDashboard.Models
 {

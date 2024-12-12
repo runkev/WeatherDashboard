@@ -1,5 +1,5 @@
-// Services/GeocodeService.cs
 using WeatherDashboard.Models.Response;
+using WeatherDashboard.Services;
 
 public class CensusGeocodeService : IGeocodeService
 {

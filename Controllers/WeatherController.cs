@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using WeatherDashboard.Services;
-using WeatherDashboard.Models;
 
 namespace WeatherDashboard.Controllers
 {
@@ -21,20 +20,20 @@ namespace WeatherDashboard.Controllers
             return View(); // returns default view template with no data
         }
 
-        // Take city name parameter and pass it to the service, then return the view with the data
+        // Take city name or zip code parameter and pass it to the service, then return the view with the data
         // run asynchronously to avoid blocking while waiting for API
-        public async Task<IActionResult> GetWeather(string city)
+        public async Task<IActionResult> GetWeather(string location)
         {
-            if (string.IsNullOrEmpty(city)) // if empty, return the default view
-                return View("Index");
-
-            var (weatherData, fahrenheit, celsius, feelsLikeF, feelsLikeC) = await _weatherService.GetTemperatures(city); 
-            ViewBag.Fahrenheit = fahrenheit;
-            ViewBag.Celsius = celsius;
-            ViewBag.FeelsLikeF = feelsLikeF;
-            ViewBag.FeelsLikeC = feelsLikeC;
-
-            return View("Index", weatherData); // return the view with the data
+            try
+            {
+                var weatherData = await _weatherService.GetWeatherByLocation(location);
+                return View(weatherData);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Error getting weather data: {ex.Message}";
+                return RedirectToAction("Index");
+            }
         }
     }
 }
