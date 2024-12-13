@@ -369,3 +369,5 @@ K:\repos\WeatherDashboard\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.reso
 K:\repos\WeatherDashboard\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
 K:\repos\WeatherDashboard\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
 K:\repos\WeatherDashboard\obj\Debug\net8.0\WeatherDashboard.MvcApplicationPartsAssemblyInfo.cs
+K:\repos\WeatherDashboard\bin\Debug\net8.0\DotNetEnv.dll
+K:\repos\WeatherDashboard\bin\Debug\net8.0\Sprache.dll

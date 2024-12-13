@@ -11,7 +11,8 @@ namespace WeatherDashboard.Services
         public WeatherService(HttpClient client, IGeocodeService geocodeService)
         {
             _client = client;
-            _client.DefaultRequestHeaders.Add("User-Agent", "(WeatherDashboard kpetow@gmail.com)");
+            var userEmail = Environment.GetEnvironmentVariable("USER_EMAIL");
+            _client.DefaultRequestHeaders.Add("User-Agent", $"(WeatherDashboard {userEmail})");
             _geocodeService = geocodeService;
         }
 
