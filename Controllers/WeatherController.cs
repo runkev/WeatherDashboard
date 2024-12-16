@@ -3,16 +3,11 @@ using WeatherDashboard.Services;
 
 namespace WeatherDashboard.Controllers
 {
-    public class WeatherController : Controller
+    public class WeatherController(WeatherService weatherService) : Controller
     {
         // field to store WeatherService instance
-        private readonly WeatherService _weatherService; // underscore prefix private fields; readonly can't be changed
+        private readonly WeatherService _weatherService = weatherService; // underscore prefix private fields; readonly can't be changed
 
-        // Constructor to inject WeatherService
-        public WeatherController(WeatherService weatherService)
-        {
-            _weatherService = weatherService;
-        }
 
         // shows the main page, no data passed yet
         public IActionResult Index()
