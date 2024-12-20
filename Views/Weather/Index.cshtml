@@ -40,13 +40,27 @@
                     <div class="border-2 border-sky-500 bg-slate-50 p-4 rounded-lg shadow-2xl col-span-2">
                         <h3 class="text-xl font-semibold mb-2">7-Day Forecast</h3>
                         <div class="flex flex-row items-center justify-start overflow-x-auto">
-                            @foreach (var day in Model.DailyForecast)
+                            @foreach (var chunk in Model.DailyForecast.Chunk(2))
                             {
-                                <div class="flex-shrink-0 w-48 h-48 p-3 mx-2 rounded-lg bg-slate-100 shadow-lg border-2 border-slate-200 flex flex-col">
-                                    <p class="font-medium text-lg mb-2">@day.Name</p>
+                                <div class="flex-shrink-0 w-48 h-96 p-3 mx-2 rounded-lg bg-slate-100 shadow-lg border-2 border-slate-200 flex flex-col">
+                                    @* First item *@
+                                    <div class="flex-1 border-b border-slate-200 pb-2">
+                                        <p class="font-medium text-lg mb-2">@chunk[0].Name</p>
+                                        <p class="font-medium text-sm text-blue-600">Day</p>
+                                        <p class="text-sm">@chunk[0].Temperature°@chunk[0].TemperatureUnit</p>
+                                        <p class="text-sm truncate text-wrap">@chunk[0].ShortForecast</p>
+                                    </div>
+                                    
+                                    @* Second item (if exists) *@
+                                    @if (chunk.Length > 1)
+                                    {
+                                        <div class="flex-1 pt-2">
+                                            <p class="font-medium text-lg mb-2">@chunk[1].Name</p>
                                             <p class="font-medium text-sm text-blue-600">Day</p>
-                                            <p class="text-sm">@day.Temperature°@day.TemperatureUnit</p>
-                                            <p class="text-sm truncate text-wrap">@day.ShortForecast</p>
+                                            <p class="text-sm">@chunk[1].Temperature°@chunk[1].TemperatureUnit</p>
+                                            <p class="text-sm truncate text-wrap">@chunk[1].ShortForecast</p>
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>
